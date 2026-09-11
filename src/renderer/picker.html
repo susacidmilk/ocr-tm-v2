@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'" />
+  <title>框选识别区域</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      cursor: crosshair;
+      user-select: none;
+      background: transparent;
+      font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+    }
+    #selection {
+      position: fixed;
+      border: 2px solid #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+      box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.45);
+      display: none;
+      pointer-events: none;
+    }
+    .tip {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .cancel {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      background: #242b3b;
+      color: #fff;
+      border: 0;
+      border-radius: 8px;
+      padding: 8px 14px;
+      cursor: pointer;
+      font-size: 13px;
+      pointer-events: auto;
+    }
+    .size {
+      position: fixed;
+      right: 16px;
+      bottom: 20px;
+      background: rgba(0,0,0,0.75);
+      color: #cbd5e1;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <button class="cancel" id="btnCancel">取消 (Esc)</button>
+  <div id="selection"></div>
+  <div class="tip">按住鼠标左键拖动，框住游戏中的对话文字区域后松开</div>
+  <div class="size" id="sizeLabel"></div>
+  <script src="picker.js"></script>
+</body>
+</html>

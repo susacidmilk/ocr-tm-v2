@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'" />
+  <title>识别区域提示</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; width: 100%; height: 100%;
+      background: transparent; overflow: hidden;
+    }
+    /* Window bounds = capture box expanded by FRAME_MARGIN on all sides.
+       The dashed outline is drawn fully in that margin (just OUTSIDE the sampled
+       box), so screen-capture OCR of the inner box is never polluted by it. */
+    #frame {
+      position: absolute;
+      inset: 6px;               /* margin between box edge and window edge */
+      outline: 2px dashed rgba(125, 185, 255, 0.75);
+      outline-offset: 2px;      /* push the line outward into the margin */
+      border-radius: 3px;
+      background: transparent;
+      pointer-events: none;
+    }
+    #tag {
+      position: absolute; top: 1px; left: 50%; transform: translateX(-50%);
+      color: rgba(140, 200, 255, 0.85); font: 10px "Segoe UI", sans-serif;
+      pointer-events: none; white-space: nowrap; background: rgba(10,15,25,0.4);
+      border-radius: 3px; padding: 0 4px;
+    }
+  </style>
+</head>
+<body>
+  <div id="frame"></div>
+  <div id="tag">识别区域</div>
+</body>
+</html>

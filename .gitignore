@@ -1,0 +1,23 @@
+# dependencies
+node_modules/
+
+# logs
+*.log
+npm-debug.log*
+electron-run.log
+
+# build output / packaging
+dist/
+out/
+build/
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# local runtime data (never commit: may contain API keys)
+game-ocr-data/
+*.tmp

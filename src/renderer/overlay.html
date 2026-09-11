@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'" />
+  <title>翻译悬浮层</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 6px 12px;
+      background: rgba(10, 13, 20, 0.78);
+      border-radius: 10px;
+      color: #eef2fa;
+      font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+      overflow: hidden;
+      user-select: none;
+      -webkit-app-region: drag;
+    }
+    #src { color: #9fb0c8; font-size: 13px; line-height: 1.35; }
+    #trans { color: #ffd86b; font-size: 20px; line-height: 1.4; font-weight: 600; }
+    #src .label, #trans .label { color: #7c8aa0; font-weight: 400; font-size: 11px; margin-right: 6px; }
+    #badge { position: absolute; top: 2px; right: 8px; color: #5f6e85; font-size: 10px; }
+    #err { color: #ff7a7a; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div id="badge"></div>
+  <div id="trans"></div>
+  <div id="src"></div>
+  <div id="err" style="display:none"></div>
+  <script src="overlay.js"></script>
+</body>
+</html>

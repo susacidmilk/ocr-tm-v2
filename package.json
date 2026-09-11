@@ -1,0 +1,63 @@
+{
+  "name": "ocr-tm-v2",
+  "productName": "OCR 翻译记忆库 v2",
+  "version": "1.0.0",
+  "description": "Windows 桌面 OCR 游戏翻译器：屏幕取词 OCR → DeepSeek / 本地 LM Studio 翻译 → 置顶悬浮层显示 → 按游戏隔离的本地翻译记忆库(TM)，同句再现秒显不重复调 API。",
+  "main": "src/main/index.js",
+  "author": "",
+  "license": "MIT",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/susacidmilk/ocr-tm-v2.git"
+  },
+  "homepage": "https://github.com/susacidmilk/ocr-tm-v2#readme",
+  "bugs": {
+    "url": "https://github.com/susacidmilk/ocr-tm-v2/issues"
+  },
+  "keywords": [
+    "ocr",
+    "translation",
+    "visual-novel",
+    "galgame",
+    "deepseek",
+    "lm-studio",
+    "translation-memory",
+    "electron",
+    "windows"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "test": "node scripts/selftest-data.js && node scripts/selftest-batch.js && node scripts/selftest-b.js && node scripts/selftest-c.js",
+    "selftest:data": "node scripts/selftest-data.js",
+    "selftest:batch": "node scripts/selftest-batch.js",
+    "selftest:b": "node scripts/selftest-b.js",
+    "selftest:c": "node scripts/selftest-c.js"
+  },
+  "build": {
+    "appId": "com.ocrtm.v2",
+    "productName": "OCR 翻译记忆库 v2",
+    "files": [
+      "src/**/*",
+      "ocr-worker.ps1",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        "portable",
+        "zip"
+      ]
+    },
+    "portable": {
+      "artifactName": "OCR-TM-v2-${version}-portable.exe"
+    }
+  },
+  "devDependencies": {
+    "electron": "^33.0.0"
+  },
+  "//": "打包成免安装 exe（可选，不装在 devDependencies 里以保持 npm install 轻量）：npx electron-builder --win --x64"
+}

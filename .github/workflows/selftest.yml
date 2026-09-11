@@ -1,0 +1,20 @@
+name: selftest
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+
+jobs:
+  test:
+    # The offline self-tests are pure Node (no Electron, no screen, no network),
+    # so they run fine on Linux CI.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      # No `npm install` needed: the self-tests only require Node builtins.
+      - name: Run self-tests
+        run: npm test

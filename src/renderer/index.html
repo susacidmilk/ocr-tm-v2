@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'" />
+  <title>OCR 翻译记忆库 v2</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">🎮 OCR 翻译记忆库 v2</div>
+    <div class="top-right">
+      <select id="mode" title="工作模式">
+        <option value="live">实时逐句翻译</option>
+        <option value="record">批量录制</option>
+      </select>
+      <span id="statusBadge" class="badge">未启动</span>
+      <button id="btnOcr" class="primary">▶ 开始 OCR</button>
+      <button id="btnNewSession" class="ghost">🔄 新会话</button>
+    </div>
+  </header>
+
+  <div id="logbar" class="logbar"></div>
+
+  <!-- suspect-hit confirmation bar (shown when live OCR nearly matches a TM line) -->
+  <div id="suspectBar" class="suspect-bar hidden">
+    <div class="sb-raw"><span class="sb-label">疑似命中</span><span id="sbText"></span></div>
+    <div id="sbCands" class="sb-cands"></div>
+    <div class="sb-actions">
+      <button id="btnSbIgnore" class="ghost small">忽略 · 实时翻译</button>
+    </div>
+  </div>
+
+  <main class="layout">
+    <section class="panel left-panel">
+      <h2>设置</h2>
+
+      <label class="field"><span>游戏名称</span><input id="gameName" /></label>
+
+      <div class="box-section">
+        <div class="box-title"><span>🧭 翻译源</span></div>
+        <select id="translateSource">
+          <option value="deepseek">☁️ DeepSeek（远程）</option>
+          <option value="lmstudio">🔌 本地 LM Studio</option>
+        </select>
+        <label class="field"><span id="apiKeyLabel">API Key</span><input id="apiKey" type="password" placeholder="sk-...（LM Studio 可不填）" autocomplete="off" /></label>
+        <label class="field"><span>API Base</span><input id="apiBase" type="text" placeholder="https://api.deepseek.com 或 http://127.0.0.1:1234/v1" /></label>
+        <label class="field"><span>模型</span><input id="model" type="text" placeholder="deepseek-chat 或 LM Studio 中加载的模型名" /></label>
+        <div class="field-hint" id="sourceHint"></div>
+      </div>
+
+      <div class="row2">
+        <label class="field"><span>源语言</span><input id="sourceLang" /></label>
+        <label class="field"><span>目标语言</span><input id="targetLang" /></label>
+      </div>
+
+      <div class="box-section">
+        <div class="box-title"><span>📐 识别区域 X/Y/W/H</span>
+          <button id="btnPickBox" class="ghost small">🖱 框选区域</button>
+        </div>
+        <div class="row4">
+          <input id="boxX" type="number" /><input id="boxY" type="number" />
+          <input id="boxW" type="number" /><input id="boxH" type="number" />
+        </div>
+        <div class="field-hint">建议点击「框选区域」在屏幕上直接拖拽框住对白文字区。</div>
+        <label class="check"><input id="showRegionFrame" type="checkbox" /> 常驻浅色识别区域框</label>
+      </div>
+      <label class="field"><span>OCR间隔(ms)</span><input id="ocrIntervalMs" type="number" /></label>
+      <label class="field"><span>稳定帧数</span><input id="stableFrames" type="number" /></label>
+
+      <div class="box-section">
+        <div class="box-title"><span>🖼 悬浮层</span></div>
+        <label class="check"><input id="showOverlay" type="checkbox" /> 显示翻译悬浮层（置顶）</label>
+        <label class="check"><input id="overlayLocked" type="checkbox" /> 点击穿透（锁定；取消后可拖动）</label>
+        <div class="row2">
+          <label class="field"><span>译文 字号</span><input id="overlayFontSize" type="number" min="10" max="60" /></label>
+          <label class="field"><span>原文 字号</span><input id="overlayOriginalFontSize" type="number" min="8" max="40" /></label>
+        </div>
+        <label class="field"><span>悬浮窗宽度(px, 240–900)</span><input id="overlayWidth" type="number" min="240" max="900" step="10" /></label>
+        <label class="field"><span>上下文句数（本地 History 上限）</span><input id="localContextWindow" type="number" min="1" max="60" /></label>
+      </div>
+
+      <div class="box-section">
+        <div class="box-title"><span>📚 术语表（当前游戏）</span></div>
+        <div class="glossary-form">
+          <input id="glossSource" placeholder="原文，如 一誠" />
+          <input id="glossTarget" placeholder="译文，如 一诚" />
+          <input id="glossNote" placeholder="#备注(可选)" />
+          <button id="btnGlossAdd" class="primary small">添加</button>
+        </div>
+        <div id="glossaryList" class="glossary-list"></div>
+        <div class="field-hint">翻译时会把启用词条作为 src->dst 约束带入（本地 VN 模板的 [Glossary]）。</div>
+      </div>
+
+      <div class="box-section">
+        <div class="box-title"><span>🔀 整段翻译</span></div>
+        <div class="row2">
+          <label class="field"><span>每段句数(70–110)</span><input id="tmBatchSize" type="number" min="70" max="110" /></label>
+          <label class="field"><span>并发段数</span><input id="tmBatchConcurrency" type="number" min="1" max="8" /></label>
+        </div>
+        <label class="field"><span>推理强度(reasoning_effort)</span>
+          <select id="tmReasoningEffort">
+            <option value="low">low（快，推荐）</option>
+            <option value="off">off（关闭思考）</option>
+            <option value="high">high（慢/深思考）</option>
+          </select>
+        </label>
+        <div class="field-hint">709 句示例：整段翻译会自动均分（每段 ~70 句），并按“并发段数”同时发出若干段；onProgress 仍按段回报。</div>
+      </div>
+
+      <button id="btnTestOcr" class="ghost">🔍 测试识别</button>
+      <div id="lastOcr" class="mono">尚未识别</div>
+
+      <div id="recPanel" class="box-section hidden">
+        <div class="box-title"><span>🎙 批量录制</span>
+          <span class="rec-count" id="recCount">0 句</span></div>
+        <div class="rec-actions">
+          <button id="btnRecStart" class="primary">录制</button>
+          <button id="btnRecStop" class="ghost">停止</button>
+          <button id="btnRecReset" class="ghost danger">清空</button>
+          <button id="btnRecTranslate" class="ghost">整段翻译</button>
+        </div>
+        <div id="recProg" class="rec-prog hidden"></div>
+        <div id="recList" class="rec-list mono"></div>
+      </div>
+    </section>
+
+    <section class="panel right-panel">
+      <div class="tabs">
+        <button id="tabHistory" class="tab active">历史</button>
+        <button id="tabTm" class="tab">翻译记忆库</button>
+        <span class="tabs-spacer"></span>
+        <span class="layout-switch" title="条目显示方式">
+          <button id="layoutTwo" class="ghost small active">两行完整</button>
+          <button id="layoutSingle" class="ghost small">单行紧凑</button>
+        </span>
+      </div>
+      <div id="viewHistory">
+        <div class="view-toolbar">
+          <span id="histCount"></span>
+          <button id="btnClearHist" class="ghost small danger">清空本会话历史</button>
+        </div>
+        <div id="historyList" class="list"></div>
+      </div>
+      <div id="viewTm" class="hidden">
+        <div class="view-toolbar">
+          <input id="tmSearch" placeholder="搜索原文/译文" />
+          <button id="btnTmExportJson" class="ghost small">导出JSON</button>
+          <button id="btnTmExportTxt" class="ghost small">导出TXT</button>
+          <button id="btnTmClear" class="ghost small danger">清空本游戏TM</button>
+        </div>
+        <div id="tmList" class="list"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
