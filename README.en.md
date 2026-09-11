@@ -4,7 +4,7 @@
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![platform: Windows](https://img.shields.io/badge/platform-Windows%2010%2F11-0078d4.svg)](#-quick-start-windows)
 
-**中文** | [English](README.en.md) ← you are here
+[中文](README.md) | **English**
 
 A Windows desktop **OCR translator for games / visual novels**: draw a box over the dialogue area → it OCRs the text → translates it with **DeepSeek (cloud)** or a **local LM Studio** model → shows the translation in an always-on-top overlay, and stores every `source / translation` pair per game in a local **Translation Memory (TM)**. When the same line appears again, the cached translation is shown **instantly, with no extra API call**.
 
