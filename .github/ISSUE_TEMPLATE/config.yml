@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 先看常见问题 / FAQ
+    url: https://github.com/susacidmilk/ocr-tm-v2#-常见问题
+    about: 很多启动、OCR、翻译卡住的问题在这里已有答案。
+  - name: 手动验收清单 / Verification checklist
+    url: https://github.com/susacidmilk/ocr-tm-v2/blob/main/docs/%E9%AA%8C%E8%AF%81%E6%B8%85%E5%8D%95.md
+    about: 真实屏幕 OCR 上手与自查步骤。

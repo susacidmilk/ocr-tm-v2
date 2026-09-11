@@ -4,6 +4,8 @@
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![platform: Windows](https://img.shields.io/badge/platform-Windows%2010%2F11-0078d4.svg)](#-快速开始windows)
 
+**中文** | [English](README.en.md)
+
 Windows 桌面 **游戏 / 视觉小说 OCR 翻译器**：在屏幕上框一块对白区 → 自动 OCR → 调用 **DeepSeek（云端）** 或 **本地 LM Studio** 翻译 → 置顶悬浮层显示译文，并把每句「原文 / 译文」按游戏存入本地**翻译记忆库（TM）**。同一段剧情再次出现时**秒显已存译文、不再重复调用 API**。
 
 > 纯本地数据、不上传历史；API Key 只存在你自己机器的设置文件里。
@@ -63,6 +65,8 @@ npm start
    - **实时模式**：对白变化即翻译，悬浮层显示译文。
    - **批量录制模式**：先挂机收集对白成清单，停止后点「整段翻译」批量译好并入库。
 4. **回看 / 修正**：右侧「历史」可回看、单句重翻、删除；「翻译记忆库」可搜索、导出。
+
+> 说明：界面目前仅中文。英文界面与更多 UI 语言已列入 [路线图](docs/ROADMAP.md)。
 
 ---
 
@@ -149,7 +153,7 @@ scripts/             离线自测
 docs/                设计说明与验证清单
 ```
 
-更多设计细节见 [`docs/设计说明.md`](docs/设计说明.md)；真实屏幕 OCR 的验收步骤见 [`docs/验证清单.md`](docs/验证清单.md)。
+更多设计细节见 [`docs/设计说明.md`](docs/设计说明.md)；真实屏幕 OCR 的验收步骤见 [`docs/验证清单.md`](docs/验证清单.md)；后续计划见 [`docs/ROADMAP.md`](docs/ROADMAP.md)；版本变化见 [`CHANGELOG.md`](CHANGELOG.md)；想参与贡献见 [`CONTRIBUTING.md`](CONTRIBUTING.md)。
 
 ---
 
