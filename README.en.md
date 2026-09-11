@@ -8,8 +8,7 @@
 
 A Windows desktop **OCR translator for games / visual novels**: draw a box over the dialogue area → it OCRs the text → translates it with **DeepSeek (cloud)** or a **local LM Studio** model → shows the translation in an always-on-top overlay, and stores every `source / translation` pair per game in a local **Translation Memory (TM)**. When the same line appears again, the cached translation is shown **instantly, with no extra API call**.
 
-> All data stays local — no history is ever uploaded. Your API key only lives in a settings file on your own machine.
-
+> All data stays local — no history is ever uploaded. 
 ---
 
 ## ✨ Features
@@ -53,6 +52,7 @@ npm start
 - Windows 10 / 11 (64-bit)
 - English OCR language pack: Settings → Time & language → Language & region — make sure **English (United States)** is present (most systems already ship it).
 - DeepSeek needs internet access; a local LM Studio model does not.
+- It is recommended to use LM Studio for local deployment and invoke a 4B small model to achieve extremely low first-token latency.
 
 ---
 
@@ -159,7 +159,7 @@ See [`docs/设计说明.md`](docs/设计说明.md) (Chinese) for design details,
 
 ## ⚠️ Disclaimer
 
-This project is intended for **personal study and self-use translation assistance**. Please respect the terms of service of any game/content you use it with, and your local laws. OCR output and machine translation are for reference only. When using third-party services such as DeepSeek, follow their terms and pay any API fees yourself.
+This project is intended for **personal study and self-use translation assistance**. Please respect the terms of service of any game/content you use it with, and your local laws. OCR output and machine translation are for reference only. When using third-party services such as DeepSeek, follow their terms and pay any API fees yourself. This project is entirely built using the deepseek harness.
 
 ## 📄 License
 
